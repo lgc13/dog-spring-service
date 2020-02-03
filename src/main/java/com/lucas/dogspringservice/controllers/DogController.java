@@ -32,13 +32,8 @@ public class DogController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Dog>> getAllDogs() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
-        // The DogsService is already injected and you can use it
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(dogsService.getAllDogs());
+    public List<Dog> getAllDogs() {
+        return dogsService.getAllDogs();
     }
 
     @GetMapping("/create/{name}")
