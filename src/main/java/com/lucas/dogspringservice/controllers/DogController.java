@@ -22,13 +22,8 @@ public class DogController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Dog> getDogById(@PathVariable long id) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
-
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(dogsService.getDogById(id));
+    public Dog getDogById(@PathVariable long id) {
+        return dogsService.getDogById(id);
     }
 
     @GetMapping("/all")
