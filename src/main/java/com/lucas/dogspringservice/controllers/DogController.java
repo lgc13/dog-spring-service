@@ -2,8 +2,6 @@ package com.lucas.dogspringservice.controllers;
 
 import com.lucas.dogspringservice.entity.Dog;
 import com.lucas.dogspringservice.services.DogsService;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -36,7 +34,4 @@ public class DogController {
 
         return dogsService.createDog(name, color);
     }
-
-
-
 }
