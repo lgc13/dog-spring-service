@@ -296,4 +296,40 @@ public class DogsService {
     <artifactId>spring-boot-starter-data-jpa</artifactId>
    </dependency>
   ```
+
+## Lombok
+
+1- Add the dependency:
+
+```
+# build.gradle file
+id "io.freefair.lombok" version "5.0.0-rc2"
+
+# check latest version on their website: https://plugins.gradle.org/plugin/io.freefair.lombok
+```
+
+2- Add the annotation and import:
+
+```java
+import lombok.extern.slf4j.Slf4j; // import
+
+@Slf4j // annotation
+public class SomeClass{}
+```
+
+3- Log to your heart's content
+
+
+```java
+import lombok.extern.slf4j.Slf4j; // import
+
+@Slf4j // annotation
+public class SomeClass{
+    public void someMethod(int id) {
+        log.info("Getting dog by id: {}", id);
+    }
+}
+```
+
+
   
