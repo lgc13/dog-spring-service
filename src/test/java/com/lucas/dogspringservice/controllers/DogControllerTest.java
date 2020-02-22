@@ -43,7 +43,7 @@ class DogControllerTest {
         List<Dog> dogList = List.of(dog);
         when(dogsService.getAllDogs()).thenReturn(dogList);
 
-        mockMvc.perform(get("/dog/all"))
+        mockMvc.perform(get("/dog/all2"))
                 .andExpect(content().string(objectMapper.writeValueAsString(dogList)));
     }
 }
