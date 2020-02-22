@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -54,6 +55,21 @@ class DogsServiceTest {
             List<Dog> result = dogsService.getAllDogs();
 
             assertThat(result).isEqualTo(dogList);
+        }
+    }
+
+    @Nested
+    class createDog {
+        @Test
+        void whenSaveIsSuccessful_returnsDog() {
+            String name = "some name";
+            String color = "a color";
+            Dog dog = new Dog(name, color);
+            when(dogRepository.save(any(Dog.class))).thenReturn(dog);
+
+            Dog result = dogsService.createDog(name, color);
+            assertThat(result).isEqualTo(dog);
+
         }
     }
 }
