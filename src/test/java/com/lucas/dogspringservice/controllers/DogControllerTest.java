@@ -11,7 +11,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -26,7 +25,7 @@ class DogControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    DogsService dogsService;
+    private DogsService dogsService;
 
     @Test
     public void getDogById_whenDogIsFoundByIdProvided_returnsDog() throws Exception {
