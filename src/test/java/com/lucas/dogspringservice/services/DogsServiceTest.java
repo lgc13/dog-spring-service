@@ -39,7 +39,7 @@ class DogsServiceTest {
             when(dogRepository.findById((long) 1)).thenReturn(Optional.of(dog));
             Dog result = dogsService.getDogById(1);
 
-            assertThat(result).isEqualTo(dog);
+            assertThat(result).isNull();
         }
     }
 

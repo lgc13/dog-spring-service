@@ -25,33 +25,44 @@ For this example, let's say I'm creating a `dog-spring-service` on the Desktop (
 
  2. Start it:
 
- ```sh
- cd ~/Desktop/dog-spring-service # Go to root directoy of your project
+```shell script
+cd ~/Desktop/dog-spring-service # Go to root directoy of your project
 ```
 
  - For Maven Projects:
 
- ```sh
+ ```shell script
  mvn spring-boot:run # For Maven Projects
  ```
 
  - For Gradle Projects:
 
- ```sh
- gradle bootRun # For Gradle Projects
+ ```shell script
+gradle bootRun # For Gradle Projects
 
- # If you don't have Gradle installed:
- brew install gradle
+# If you don't have Gradle installed:
+brew install gradle
 
- # If you need to build:
- gradle build
+# If you need to build:
+gradle build
+
+# If you have issues, or if it can't find the `main` method, then clean it:
+gradle clean
+
+# Running with a profile:
+gradle bootRun --args="--spring.profiles.active=local" # `local` is the profile here
+
+# Run tests:
+gradle test
+# or 
+./gradlew test
  ```
 
  ## Simple Rest API
 
 1. Create controller
 
- ```sh
+ ```shell script
  # 1. Creating controllers folder:
  mkdir ~/Desktop/dog-spring-service/src/main/java/com/lucas/dogspringservice/controllers
 
@@ -84,7 +95,7 @@ public class DogController {
 
  - If the spring web framework is not installed, you can add it:
 
- ```sh
+ ```shell script
  # Gradle:
 
  # Go to build.gradle and change:
@@ -119,7 +130,7 @@ CREATE DATABASE dogsdb;
    Delete that one and create a `application.yml` file instead
 - in your `src/main/resources/application.yml`, add the following:
 
-```yml
+```yaml
 ### Spring DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
 spring:
   datasource:
@@ -132,7 +143,7 @@ spring:
 
 - you can also create a `application-local.yml` so you can use it for a local profile (and not push on git)
 
-```yml
+```yaml
 ### Spring DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
 spring:
   datasource:
@@ -193,14 +204,14 @@ Example: https://www.roytuts.com/spring-boot-liquibase-gradle-example/
 
 1. Add needed dependency
 
-```sh
+```shell script
 # gradle
 implementation 'org.liquibase:liquibase-core:3.8.2'
 ```
 
 2. Create changelog file
 
-```sh
+```shell script
 # in projRoot/src/main/resources/db
 
 touch db.changelog-master.yaml # this can also be .xml, .json, or .sql formats
@@ -239,7 +250,7 @@ databaseChangeLog:
 
 4. Add the classpath to your changelog file
 
-```sh
+```shell script
 # in src/main/resource/application.properties
 
 #liquibase.change-log=classpath:db/db.changelog-master.yaml
@@ -301,7 +312,7 @@ public class DogsService {
 
 1- Add the dependency:
 
-```
+```groovy
 # build.gradle file
 id "io.freefair.lombok" version "5.0.0-rc2"
 
