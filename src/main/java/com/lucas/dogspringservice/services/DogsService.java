@@ -2,21 +2,16 @@ package com.lucas.dogspringservice.services;
 
 import com.lucas.dogspringservice.entity.Dog;
 import com.lucas.dogspringservice.repository.DogRepository;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.Optional;
 
 @Component // Defines that this class is a spring bean
 @Slf4j
 @RequiredArgsConstructor
 public class DogsService {
-
     private final DogRepository dogRepository;
 
     public Dog getDogById(long id) {

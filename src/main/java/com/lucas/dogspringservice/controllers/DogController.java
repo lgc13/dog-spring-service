@@ -2,19 +2,16 @@ package com.lucas.dogspringservice.controllers;
 
 import com.lucas.dogspringservice.entity.Dog;
 import com.lucas.dogspringservice.services.DogsService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-
-
-import java.util.List;
 
 @RestController // Defines that this class is a spring bean
 @RequestMapping("dog")
 @Slf4j
 @RequiredArgsConstructor
 public class DogController {
-
     private final DogsService dogsService;
 
     @GetMapping("/{id}")
