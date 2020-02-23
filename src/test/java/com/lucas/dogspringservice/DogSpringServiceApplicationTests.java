@@ -8,7 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @AutoConfigureTestDatabase // this replaces dataSource bean with embedded version
 class DogSpringServiceApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {}
 }

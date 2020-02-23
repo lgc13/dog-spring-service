@@ -1,24 +1,22 @@
 package com.lucas.dogspringservice.services;
 
-import com.lucas.dogspringservice.entity.Dog;
-import com.lucas.dogspringservice.repository.DogRepository;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.Nested;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.List;
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import com.lucas.dogspringservice.entity.Dog;
+import com.lucas.dogspringservice.repository.DogRepository;
+import java.util.List;
+import java.util.Optional;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 @ExtendWith(MockitoExtension.class)
 class DogsServiceTest {
-
     @Mock
     private DogRepository dogRepository;
 
@@ -27,6 +25,7 @@ class DogsServiceTest {
 
     @Nested
     class getDogById {
+
         @Test
         public void whenNoDogInRepository_returnsNull() {
             when(dogRepository.findById((long) 1)).thenReturn(Optional.empty());
@@ -46,6 +45,7 @@ class DogsServiceTest {
 
     @Nested
     class getAllDogs {
+
         @Test
         void whenRepositoryReturnsAList_returnsTheList() {
             Dog dog1 = new Dog("dogName", "someColor");
@@ -60,6 +60,7 @@ class DogsServiceTest {
 
     @Nested
     class createDog {
+
         @Test
         void whenSaveIsSuccessful_returnsDog() {
             String name = "some name";
@@ -69,7 +70,6 @@ class DogsServiceTest {
 
             Dog result = dogsService.createDog(name, color);
             assertThat(result).isEqualTo(dog);
-
         }
     }
 }
