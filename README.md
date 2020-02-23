@@ -85,7 +85,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequestMapping("dogs")
 public class DogController {
 
-    @GetMapping("/")
+    @GetMapping("")
     public String getAllDogs() {
         System.out.println("Return all dogs here!");
         return "I am a Dog! (string)...";
@@ -108,7 +108,7 @@ public class DogController {
 
  From a browser or Postman, call:
 
- `http://localhost:8080/dogs/`
+ `http://localhost:8080/dogs`
 
 
 ## Database integration
@@ -276,7 +276,7 @@ public class DogsController {
     @Autowired // Tells the application context to inject an instance of DogsService here
     private DogsService dogsService;
 
-    @GetMapping("/")
+    @GetMapping("")
     public String getAllDogs() {
         // The DogsService is already injected and you can use it
         return dogsService.getAllDogs();
@@ -341,6 +341,31 @@ public class SomeClass{
     }
 }
 ```
+
+### API Naming/Best Practices
+
+Check out these links: [doc1](https://restfulapi.net/resource-naming/), [doc2](https://docs.microsoft.com/en-us/azure/architecture/best-practices/api-design)
+
+```text
+- use plural `nouns`, not verbs
+    GOOD: /api/dogs
+    BAD: /api/getDogs
+
+- use HTTP method types for requests
+    Getting a list of dogs:
+
+    GOOD: GET /api/dogs - returns all dogs
+    BAD: POST /api/dogs - should be used to ADD a dog
+
+```
+
+- `define operations by HTTP request:`
+
+| Resource            | POST                              | GET                                 |  PUT                                          | DELETE                           |
+| ------------------- | --------------------------------- | ------------------------------------| ----------------------------------------------| -------------------------------- |
+| /customers          | Create a new customer             | Retrieve all customers              | Bulk update of customers                      | Remove all customers             |
+| /customers/1        | Error                             | Retrieve the details for customer 1 | Update the details of customer 1 if it exists | Remove customer 1                |
+| /customers/1/orders | Create a new order for customer 1 | Retrieve all orders for customer 1  | Bulk update of orders for customer 1          | Remove all orders for customer 1 |
 
 
   
