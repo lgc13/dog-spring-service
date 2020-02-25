@@ -1,1 +1,9 @@
-/Users/lucascosta/Desktop/LucasProjects/LucasCosta_portfolio/.dotfiles/prettierrc.yml
+# Prettier configuration
+overrides:
+  - files:
+      - "*.java"
+    options:
+      printWidth: 100
+      tabWidth: 4
+      useTabs: false
+      trailingComma: "none"
