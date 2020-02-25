@@ -1,3 +1,5 @@
+server.port: ${PORT}
+
 ### Spring DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
 spring:
   datasource:
