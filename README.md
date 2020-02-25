@@ -115,7 +115,7 @@ public class DogController {
 
 1. Create your database
 
-(I used psql to create a public db)
+(I used `psql` to create a public db)
 
 ```shell script
 # in psql
@@ -141,7 +141,7 @@ spring:
   
 ```
 
-- you can also create a `application-local.yml` so you can use it for a local profile (and not push on git)
+- ~~you can also create a `application-local.yml` so you can use it for a local profile (and not push on git)~~
 
 ```yaml
 ### Spring DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
@@ -155,6 +155,63 @@ spring:
     properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect # The SQL dialect makes Hibernate generate better SQL for the chosen database
     hibernate.ddl-auto: update # Hibernate ddl auto (create, create-drop, validate, update)
 ```
+
+- As per the [12-factor-app CONFIG rule](https://12factor.net/config), we should not have config (passwords/secrets) in files that are in your repo (or can possibly be committed)
+- One way to accomplish that is by using env vars:
+
+```yaml
+server.port: ${PORT}
+
+### Spring DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
+spring:
+  datasource: # no url, username, or password
+    driverClassName: org.postgresql.Driver
+  jpa:
+    properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect # The SQL dialect makes Hibernate generate better SQL for the chosen database
+    hibernate.ddl-auto: update # Hibernate ddl auto (create, create-drop, validate, update)
+```
+   
+- Add a common configuration to build your db connection:
+   - BasicDataSource is a dependency from apache. (more below)
+
+```java
+import java.net.URI;
+import java.net.URISyntaxException;
+import org.apache.commons.dbcp2.BasicDataSource;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class CommonConfiguration {
+
+    @Bean
+    public BasicDataSource dataSource() throws URISyntaxException {
+        URI dbUri = new URI(System.getenv("DATABASE_URL"));
+
+        String username = dbUri.getUserInfo().split(":")[0];
+        String password = dbUri.getUserInfo().split(":")[1];
+        String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
+
+        BasicDataSource basicDataSource = new BasicDataSource();
+        basicDataSource.setUrl(dbUrl);
+        basicDataSource.setUsername(username);
+        basicDataSource.setPassword(password);
+
+        return basicDataSource;
+    }
+}
+```
+```groovy
+// add dependency to build.gradle
+implementation 'org.apache.commons:commons-dbcp2:2.7.0'
+```
+
+```shell script
+# Lastly, add any/all env variables needed to your run configuration (can be done through IntelliJ). In this case:
+
+PORT: # some port number. ex: 8081
+DATABASE_URL: # your url. ex: postgres://username:password@localhost:5432/databaseName
+```   
 
 3. Create an entity
 
