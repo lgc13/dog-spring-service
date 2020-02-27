@@ -418,11 +418,11 @@ Check out these links: [doc1](https://restfulapi.net/resource-naming/), [doc2](h
 
 - `define operations by HTTP request:`
 
-| Resource            | POST                              | GET                                 |  PUT                                          | DELETE                           |
-| ------------------- | --------------------------------- | ------------------------------------| ----------------------------------------------| -------------------------------- |
-| /customers          | Create a new customer             | Retrieve all customers              | Bulk update of customers                      | Remove all customers             |
-| /customers/1        | Error                             | Retrieve the details for customer 1 | Update the details of customer 1 if it exists | Remove customer 1                |
-| /customers/1/orders | Create a new order for customer 1 | Retrieve all orders for customer 1  | Bulk update of orders for customer 1          | Remove all orders for customer 1 |
+| Resource            | GET                                 | POST                              |  PUT                                          | DELETE                           |
+| ------------------- | ------------------------------------| --------------------------------- | ----------------------------------------------| -------------------------------- |
+| /customers          | Retrieve all customers              | Create a new customer             | Bulk update of customers                      | Remove all customers             |
+| /customers/1        | Retrieve the details for customer 1 | Error                             | Update the details of customer 1 if it exists | Remove customer 1                |
+| /customers/1/orders | Retrieve all orders for customer 1  | Create a new order for customer 1 | Bulk update of orders for customer 1          | Remove all orders for customer 1 |
 
 
   
