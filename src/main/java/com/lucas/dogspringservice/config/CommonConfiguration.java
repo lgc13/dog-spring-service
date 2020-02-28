@@ -2,12 +2,24 @@ package com.lucas.dogspringservice.config;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class CommonConfiguration {
+@RequiredArgsConstructor
+public class CommonConfiguration implements WebMvcConfigurer {
+
+    private final RequestInterceptor requestInterceptor;
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(requestInterceptor);
+    }
 
     @Bean
     public BasicDataSource dataSource() throws URISyntaxException {
@@ -15,7 +27,8 @@ public class CommonConfiguration {
 
         String username = dbUri.getUserInfo().split(":")[0];
         String password = dbUri.getUserInfo().split(":")[1];
-        String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
+        String dbUrl =
+            "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
 
         BasicDataSource basicDataSource = new BasicDataSource();
         basicDataSource.setUrl(dbUrl);
