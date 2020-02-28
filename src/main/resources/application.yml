@@ -1,4 +1,6 @@
 server.port: ${PORT}
+gateway.url: ${GATEWAY_URL}
+database.url: ${DATABASE_URL}
 
 ### Spring DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
 spring:

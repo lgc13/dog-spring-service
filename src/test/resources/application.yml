@@ -1,0 +1,3 @@
+server.port: 8081
+gateway.url: https://dummy/gateway
+database.url: postgres://myusername:mypassword@localhost:5432/someDBName
