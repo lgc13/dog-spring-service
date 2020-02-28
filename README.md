@@ -424,5 +424,57 @@ Check out these links: [doc1](https://restfulapi.net/resource-naming/), [doc2](h
 | /customers/1        | Retrieve the details for customer 1 | Error                             | Update the details of customer 1 if it exists | Remove customer 1                |
 | /customers/1/orders | Retrieve all orders for customer 1  | Create a new order for customer 1 | Bulk update of orders for customer 1          | Remove all orders for customer 1 |
 
+#### Adding an Interceptor
 
+```java
+// RequestInterceptor.java
+package com.lucas.dogspringservice.config;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+
+@Component
+@Slf4j
+public class RequestInterceptor implements HandlerInterceptor {
+
+    @Value("${gateway.url}")
+    private String gatewayUrl;
+
+    @Override
+    public boolean preHandle(  // runs before every request
+        HttpServletRequest request,
+        HttpServletResponse response,
+        Object handler
+    ) {
+        String xForwardedHostHeader = request.getHeader("x-forwarded-host");
+        String xForwardedProtoHeader = request.getHeader("x-forwarded-proto");
+        String fullUrlHeader = xForwardedProtoHeader + "://" + xForwardedHostHeader;
+
+        log.info("gatewayUrl: {}", gatewayUrl);
+        if (fullUrlHeader.equals(gatewayUrl)) {
+            return true;
+        } else {
+            log.info("Unauthorized request from {}", fullUrlHeader);
+            response.setStatus(401);  // if urls don't match, return a 401 Unauthorized
+            return false;
+        }
+    }
+}
+
+
+// dont forget to use this in a config file. ex: CommonConfiguration.java
+@Configuration
+@RequiredArgsConstructor
+public class CommonConfiguration implements WebMvcConfigurer {
+
+    private final RequestInterceptor requestInterceptor;
+    
+    // ... others
+}
+```
   
