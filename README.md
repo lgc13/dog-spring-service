@@ -174,7 +174,14 @@ spring:
 - Add a common configuration to build your db connection:
    - BasicDataSource is a dependency from apache. (more below)
 
+```groovy
+// add dependency to build.gradle
+implementation 'org.apache.commons:commons-dbcp2:2.7.0'
+```
+
 ```java
+// DataSourceConfig.java
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -182,7 +189,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class CommonConfiguration {
+public class DataSourceConfig {
 
     @Bean
     public BasicDataSource dataSource() throws URISyntaxException {
@@ -201,10 +208,6 @@ public class CommonConfiguration {
     }
 }
 ```
-```groovy
-// add dependency to build.gradle
-implementation 'org.apache.commons:commons-dbcp2:2.7.0'
-```
 
 ```shell script
 # Lastly, add any/all env variables needed to your run configuration (can be done through IntelliJ). In this case:
@@ -213,7 +216,19 @@ PORT: # some port number. ex: 8081
 DATABASE_URL: # your url. ex: postgres://username:password@localhost:5432/databaseName
 ```   
 
-3. Create an entity
+3. Import needed dependencies
+
+```shell script
+# buid.gradle file
+
+# in order to use Hibernate, we need to import a jpa dependency:
+implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+# postgres driver needed:
+implementation 'org.postgresql:postgresql'
+```
+
+4. Create an entity
 
 - An @Entity is what is used for each table so that `Hibernate` can handle it
 
@@ -238,18 +253,6 @@ public class Dog {
     @Column(name = "name")
     private String name;
 }
-```
-
-4. Import needed dependencies
-
-```shell script
-# buid.gradle file
-
-# in order to use Hibernate, we need to import a jpa dependency:
-implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-
-# postgres driver needed:
-implementation 'org.postgresql:postgresql'
 ```
 
 Now when you run your project, it'll create that table every time it starts.
