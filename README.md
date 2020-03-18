@@ -115,35 +115,32 @@ public class DogController {
 
 1. Create your database
 
-(I used `psql` to create a public db)
-
-```shell script
-# in psql
+```sql
+-- in psql
 CREATE DATABASE dogsdb;
 
-\c dogsdb # connects to db
+\c dogsdb -- connects to db
 ```
 
-2. Connect to database
+2. Add dependencies
 
-- you probably have a `src/main/resources/application.properties` file. 
-   Delete that one and create a `application.yml` file instead
-- in your `src/main/resources/application.yml`, add the following:
+```shell script
+# buid.gradle file
 
-```yaml
-### Spring DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
-spring:
-  datasource:
-    driverClassName: org.postgresql.Driver
-  jpa:
-    properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect # The SQL dialect makes Hibernate generate better SQL for the chosen database
-    hibernate.ddl-auto: update # Hibernate ddl auto (create, create-drop, validate, update)
-  
+# in order to use Hibernate, we need to import a jpa dependency:
+implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+# postgres driver needed:
+implementation 'org.postgresql:postgresql'
 ```
 
-- ~~you can also create a `application-local.yml` so you can use it for a local profile (and not push on git)~~
+3. Connect to database
+
+- Rename your `src/main/resources/application.properties` file to `application.yml`
 
 ```yaml
+# application.yml
+
 ### Spring DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
 spring:
   datasource:
@@ -156,10 +153,39 @@ spring:
     hibernate.ddl-auto: update # Hibernate ddl auto (create, create-drop, validate, update)
 ```
 
+4. Create an entity
+
+```java
+package com.lucas.dogspringservice.entity;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Column;
+
+@Entity // what is used for each table so that `Hibernate` can handle it
+@Table(name = "dog")
+public class Dog {
+    @Id
+    @GeneratedValue // no need for column here
+    private long id;
+
+    @Column(name = "name")
+    private String name;
+}
+```
+
+- Now when you run your project, it'll create that table every time it starts.
+
+### Bonus: Connect to DB using env variables:
+
 - As per the [12-factor-app CONFIG rule](https://12factor.net/config), we should not have config (passwords/secrets) in files that are in your repo (or can possibly be committed)
-- One way to accomplish that is by using env vars:
+
+1. Amend application.yml file
 
 ```yaml
+# application.yml
 server.port: ${PORT}
 
 ### Spring DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
@@ -171,8 +197,7 @@ spring:
     hibernate.ddl-auto: update # Hibernate ddl auto (create, create-drop, validate, update)
 ```
    
-- Add a common configuration to build your db connection:
-   - BasicDataSource is a dependency from apache. (more below)
+2. Add a common configuration to build your db connection:
 
 ```groovy
 // add dependency to build.gradle
@@ -209,54 +234,23 @@ public class DataSourceConfig {
 }
 ```
 
-```shell script
-# Lastly, add any/all env variables needed to your run configuration (can be done through IntelliJ). In this case:
+3. Add your env variables
 
+```shell script
 PORT: # some port number. ex: 8081
 DATABASE_URL: # your url. ex: postgres://username:password@localhost:5432/databaseName
 ```   
 
-3. Import needed dependencies
+- Here are some ways to add them:
 
-```shell script
-# buid.gradle file
-
-# in order to use Hibernate, we need to import a jpa dependency:
-implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-
-# postgres driver needed:
-implementation 'org.postgresql:postgresql'
-```
-
-4. Create an entity
-
-- An @Entity is what is used for each table so that `Hibernate` can handle it
-
-Here's an entity example:
-
-```java
-package com.lucas.dogspringservice.entity;
-
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Column;
-
-@Entity
-@Table(name = "dog")
-public class Dog {
-    @Id
-    @GeneratedValue // no need for column here
-    private long id;
-
-    @Column(name = "name")
-    private String name;
-}
-```
-
-Now when you run your project, it'll create that table every time it starts.
- 
+   1. Use [EnvFile plugin](https://plugins.jetbrains.com/plugin/7861-envfile)
+      - download plugin
+      - create an env file. ex: ~/.lucas-env-variables.yaml
+      - point to your envFile from the plugin
+         1. IntellijJ > Application Run Configuration > EnvFile tab > Enable EnvFile
+         2. Add env file (bottom + sign) > ~/.lucas-env-variables.yaml
+   2. IntellijJ > Application Run Configuration > Environment Variables
+   3. export them in your bash profile
  
 ## Liquibase
 
