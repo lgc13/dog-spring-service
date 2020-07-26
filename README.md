@@ -266,7 +266,7 @@ implementation 'org.liquibase:liquibase-core:3.8.2'
 2. Create changelog file
 
 ```shell script
-# in projRoot/src/main/resources/db
+# in projRoot/src/main/resources/db/changelog
 
 touch db.changelog-master.yaml # this can also be .xml, .json, or .sql formats
 ```
@@ -302,13 +302,22 @@ databaseChangeLog:
                     nullable: false
 ```
 
-4. Add the classpath to your changelog file
+- For separate migrations:
 
-```shell script
-# in src/main/resource/application.properties
+```yaml
+# projRoot/src/main/resources/db/changelog/db.changelog-master.yaml
+databaseChangeLog:
+    - include:
+        file: db/migrations/some-file-name.yml
 
-#liquibase.change-log=classpath:db/db.changelog-master.yaml
-spring.liquibase.changeLog=classpath:db/db.changelog-master.yaml
+# projRoot/src/main/resources/db/migrations/some-file-name.yml
+databaseChangeLog:
+  - changeSet:  # you could have multiple change Sets
+      id: 1     # each changeSet needs its own id
+      author: lucasc
+      changes:
+        - createTable:
+            tableName: dogsdb
 ```
  
 ## Annotations:
